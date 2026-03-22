@@ -1,0 +1,36 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public int findMaxLength(int[] nums) {
+        // Map to store the first occurrence of a running sum: {sum: index}
+        Map<Integer, Integer> sumToIndex = new HashMap<>();
+        // Initial sum of 0 occurs at index -1 (before the array starts) to handle
+        // subarrays starting from the beginning.
+        sumToIndex.put(0, -1);
+        
+        int maxLength = 0;
+        int currentSum = 0;
+        
+        for (int i = 0; i < nums.length; ++i) {
+            // Treat 0 as -1 and 1 as 1 to check for a net sum of 0
+            if (nums[i] == 0) {
+                currentSum += -1;
+            } else {
+                currentSum += 1;
+            }
+            
+          
+            if (sumToIndex.containsKey(currentSum)) {
+                int previousIndex = sumToIndex.get(currentSum);
+                // Calculate the length of this subarray and update the maximum length
+                maxLength = Math.max(maxLength, i - previousIndex);
+            } else {
+                // Store the first occurrence of this new sum
+                sumToIndex.put(currentSum, i);
+            }
+        }
+        
+        return maxLength;
+    }
+}
